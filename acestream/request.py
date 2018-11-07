@@ -18,6 +18,8 @@ class Request(object):
 
   def __init__(self, schema='http', host='127.0.0.1', port=6878):
     self.base = '{0}://{1}:{2}'.format(schema, host, port)
+    self.version = self._getapi_version()
+    self.token   = self._getapi_token()
 
   def get(self, url, **params):
     apiurl = self._geturl(url, **params)
@@ -60,3 +62,15 @@ class Request(object):
       return Response(data=result)
     else:
       return Response(message=error, error='unavailable')
+
+  def _getapi_version(self):
+    response = self.getversion()
+
+    if response.success:
+      return response.data.get('version')
+
+  def _getapi_token(self):
+    response = self.gettoken()
+
+    if response.success:
+      return response.data.get('token')
