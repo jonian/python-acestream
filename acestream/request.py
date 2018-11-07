@@ -29,6 +29,12 @@ class Request(object):
   def getversion(self):
     return self.getservice(method='get_version')
 
+  def getsearch(self, **params):
+    return self.get('server/api', **params, format='json')
+
+  def gettoken(self):
+    return self.getsearch(method='get_api_access_token')
+
   def getstream(self, **params):
     return self.get('ace/getstream', **params, format='json')
 
