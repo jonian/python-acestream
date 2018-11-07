@@ -37,6 +37,9 @@ class Request(object):
   def gettoken(self):
     return self.getapi(method='get_api_access_token')
 
+  def getsearch(self, **params):
+    return self.getapi(method='search', token=self.token, **params)
+
   def getstream(self, **params):
     return self.get('ace/getstream', format='json', **params)
 
