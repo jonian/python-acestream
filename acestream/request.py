@@ -17,7 +17,7 @@ class Response(object):
 class Request(object):
 
   def __init__(self, schema='http', host='127.0.0.1', port=6878):
-    self.base = '{0}://{1}:{2}'.format(schema, host, port)
+    self.base    = self._getapi_base(schema, host, port)
     self.version = self._getapi_version()
     self.token   = self._getapi_token()
 
@@ -26,7 +26,7 @@ class Request(object):
     return self._request(apiurl)
 
   def getservice(self, **params):
-    return self.get('webui/api/service', **params, format='json')
+    return self.get('webui/api/service', format='json', **params)
 
   def getversion(self):
     return self.getservice(method='get_version')
@@ -38,7 +38,7 @@ class Request(object):
     return self.getapi(method='get_api_access_token')
 
   def getstream(self, **params):
-    return self.get('ace/getstream', **params, format='json')
+    return self.get('ace/getstream', format='json', **params)
 
   def _geturl(self, path, **params):
     params = urlencode(params)
@@ -62,6 +62,9 @@ class Request(object):
       return Response(data=result)
     else:
       return Response(message=error, error='unavailable')
+
+  def _getapi_base(self, schema, host, port):
+    return '{0}://{1}:{2}'.format(schema, host, port)
 
   def _getapi_version(self):
     response = self.getversion()
