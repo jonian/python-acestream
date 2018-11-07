@@ -71,12 +71,12 @@ class Request(object):
 
   def _getapi_version(self):
     response = self.getversion()
-
-    if response.success:
-      return response.data.get('version')
+    return self._get_response_key(response, 'version')
 
   def _getapi_token(self):
     response = self.gettoken()
+    return self._get_response_key(response, 'token')
 
+  def _get_response_key(self, response, key):
     if response.success:
-      return response.data.get('token')
+      return response.data.get(key)
