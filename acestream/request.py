@@ -44,6 +44,7 @@ class Request(object):
     return self.get('ace/getstream', format='json', **params)
 
   def _geturl(self, path, **params):
+    params = dict(map(self._parse_param, params.items()))
     params = urlencode(params)
     apiurl = str(path).replace('%s/' % self.base, '')
 
@@ -80,3 +81,11 @@ class Request(object):
   def _get_response_key(self, response, key):
     if response.success:
       return response.data.get(key)
+
+  def _parse_param(self, param):
+    key, value = param
+
+    if isinstance(value, bool):
+      value = int(value)
+
+    return (key, value)
