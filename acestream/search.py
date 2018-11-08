@@ -1,3 +1,5 @@
+import math
+
 from acestream.object import Extendable
 from acestream.stream import Stream
 
@@ -50,24 +52,46 @@ class StreamResult(Extendable):
 
 class Search(Extendable):
 
-  total   = 0
-  time    = 0
-  results = None
+  params      = None
+  groups      = False
+  page        = 1
+  page_size   = 10
+  total_pages = 0
+  total       = 0
+  time        = 0
+  results     = None
 
-  def __init__(self, request):
-    self.api = request
+  def __init__(self, request, **params):
+    self.api       = request
+    self.params    = params
+    self.page      = int(params.pop('page', 1))
+    self.page_size = int(params.pop('page_size', 10))
+    self.groups    = bool(params.pop('group_by_channels', False))
 
-  def query(self, **params):
-    channels = params.get('group_by_channels')
-    response = self.api.getsearch(**params)
+  def get(self, page=1):
+    self.page = page
+    response  = self.api.getsearch(**self.query_params)
 
     if response.success:
       results = response.data.pop('results')
-      self._generate_results(channels, results)
-      self._set_attrs_to_values(response.data)
+      self._generate_results(results)
 
-  def _generate_results(self, channels, results):
-    if channels:
+      self._set_attrs_to_values(response.data)
+      self.total_pages = math.ceil(self.total / self.page_size)
+
+  @property
+
+  def query_params(self):
+    params = self.params
+
+    params['page']              = self.page
+    params['page_size']         = self.page_size
+    params['group_by_channels'] = self.groups
+
+    return params
+
+  def _generate_results(self, results):
+    if self.groups:
       self.results = [ChannelResult(self.api, i) for i in results]
     else:
       self.results = [StreamResult(self.api, i) for i in results]
