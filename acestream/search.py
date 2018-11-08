@@ -34,15 +34,15 @@ class StreamResult(Extendable):
   stream                  = None
 
   def __init__(self, request, data):
-    self._generate_stream(request, data['infohash'])
+    self._generate_stream(request, data.get('infohash'))
     self._set_attrs_to_values(data)
-    self._convert_result_attributes()
+    self._parse_attributes()
 
   def _generate_stream(self, request, infohash):
     self.stream = Stream(request, infohash=infohash)
 
-  def _convert_result_attributes(self):
-    self.name = str(self.name).strip()
+  def _parse_attributes(self):
+    self.name = self.name.strip()
 
 
 class Search(Extendable):
