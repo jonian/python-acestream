@@ -57,9 +57,9 @@ class Search(Extendable):
   def __init__(self, request):
     self.api = request
 
-  def query(self, term, **params):
+  def query(self, **params):
     channels = params.get('group_by_channels')
-    response = self.api.getsearch(query=term, **params)
+    response = self.api.getsearch(**params)
 
     if response.success:
       results = response.data.pop('results')
