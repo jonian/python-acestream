@@ -1,15 +1,12 @@
 from acestream.object import Extendable
 from acestream.object import Observable
 
-from acestream.utils import is_acestream
 from acestream.utils import sha1_hexdigest
 
 
 class Stream(Extendable, Observable):
 
-  is_http             = False
-  is_stream           = False
-  is_live             = False
+  is_live             = None
   playback_session_id = None
   command_url         = None
   playback_url        = None
@@ -17,30 +14,29 @@ class Stream(Extendable, Observable):
   error               = None
   error_message       = None
 
-  def __init__(self, api_request, stream_url):
-    self.api = api_request
-    self.url = stream_url
+  def __init__(self, request, id=None, url=None, infohash=None):
+    self.api = request
 
-    self._parse_stream_params()
-
-  @property
-
-  def params(self):
-    if self.is_stream:
-      return { 'sid': self.sid, 'id': self.id }
-
-    if self.is_http:
-      return { 'sid': self.sid, 'url': self.url }
+    self._check_required_args(id=id, url=url, infohash=infohash)
+    self._parse_stream_params(id=id, url=url, infohash=infohash)
 
   def start(self):
-    response = self.api.getstream(**self.params)
+    response = self.api.getstream(sid=self.sid, **self.params)
     self._set_response_to_values(response)
 
     return response.success
 
   def stop(self):
     response = self.api.get(self.command_url, method='stop')
-    return response == 'ok'
+    return response.data == 'ok'
+
+  @property
+
+  def params(self):
+    params = { 'id': self.id, 'url': self.url, 'infohash': self.infohash }
+    params = dict(filter(lambda item: item[1] is not None, params.items()))
+
+    return params
 
   def _set_response_to_values(self, response):
     if response.success:
@@ -52,16 +48,18 @@ class Stream(Extendable, Observable):
     self.error         = data.error
     self.error_message = data.message
 
-  def _parse_stream_params(self):
-    self.is_http   = self.url.startswith('http')
-    self.is_stream = is_acestream(self.url)
+  def _check_required_args(self, **kwargs):
+    values = list(filter(None, kwargs.values()))
+    params = "'id' or 'url' or 'infohash'"
 
-    if self.is_stream and not self.url.startswith('acestream'):
-      self.url = 'acestream://{0}'.format(self.url)
+    if not any(values):
+      banner = '__init__() missing 1 required positional argument'
+      raise TypeError('{0}: {1}'.format(banner, params))
 
-    if self.is_stream:
-      self.id  = self.url.split('://')[-1]
-      self.sid = sha1_hexdigest(self.id)
+    if len(values) > 1:
+      banner = '__init__() too many positional arguments, provide only one of'
+      raise TypeError('{0}: {1}'.format(banner, params))
 
-    if self.is_http:
-      self.sid = sha1_hexdigest(self.url)
+  def _parse_stream_params(self, **kwargs):
+    self.sid = sha1_hexdigest(kwargs)
+    self._set_attrs_to_values(kwargs)
