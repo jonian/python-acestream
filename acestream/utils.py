@@ -11,7 +11,7 @@ def parse_json(string):
 
 
 def sha1_hexdigest(string):
-  return hashlib.sha1(string.encode('utf-8')).hexdigest()
+  return hashlib.sha1(str(string).encode('utf-8')).hexdigest()
 
 
 def is_acestream(string):
