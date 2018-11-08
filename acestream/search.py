@@ -2,22 +2,25 @@ from acestream.object import Extendable
 from acestream.stream import Stream
 
 
-class ChannelResult(object):
+class ChannelResult(Extendable):
 
   total = 0
   name  = None
+  icon  = None
+  epg   = None
   items = None
 
   def __init__(self, request, data):
-    self._set_attributes(data['name'], data['items'])
-    self._generate_items(request, data['items'])
-
-  def _set_attributes(self, name, items):
-    self.name  = name
-    self.total = len(items)
+    self._generate_items(request, data.pop('items'))
+    self._set_attrs_to_values(data)
+    self._parse_attributes()
 
   def _generate_items(self, request, results):
     self.items = [StreamResult(request, i) for i in results]
+
+  def _parse_attributes(self):
+    self.name  = self.name.strip()
+    self.total = len(self.items)
 
 
 class StreamResult(Extendable):
