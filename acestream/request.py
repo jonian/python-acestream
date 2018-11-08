@@ -41,7 +41,13 @@ class Request(object):
     return self.getapi(method='search', token=self.token, **params)
 
   def getstream(self, **params):
-    return self.get('ace/getstream', format='json', **params)
+    if params.pop('hls', False):
+      return self.get('ace/manifest.m3u8', format='json', **params)
+    else:
+      return self.get('ace/getstream', format='json', **params)
+
+  def getbroadcast(self, manifest_url):
+    return self.get('hls/manifest.m3u8', format='json', manifest_url=manifest_url)
 
   def _geturl(self, path, **params):
     params = dict(map(self._parse_param, params.items()))
