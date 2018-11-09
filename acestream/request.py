@@ -7,11 +7,10 @@ from urllib.error import URLError
 
 class Response(object):
 
-  def __init__(self, data=None, error=False, message=None):
+  def __init__(self, data=None, error=False):
     self.data    = data
     self.error   = error
     self.success = not bool(error)
-    self.message = message
 
 
 class Request(object):
@@ -71,7 +70,7 @@ class Request(object):
       response = request.urlopen(url).read()
       return self._generate_response(response)
     except (ConnectionRefusedError, URLError):
-      return Response(error='noconnect', message='engine unavailable')
+      return Response(error='engine unavailable')
 
   def _generate_response(self, output):
     output = self._parse_json(output)
@@ -81,7 +80,7 @@ class Request(object):
     if result:
       return Response(data=result)
     else:
-      return Response(message=error, error='unavailable')
+      return Response(error=error)
 
   def _getapi_base(self, schema, host, port):
     return '{0}://{1}:{2}'.format(schema, host, port)

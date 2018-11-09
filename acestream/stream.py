@@ -51,8 +51,6 @@ class Stream(Extendable, Observable):
   command_url         = None
   playback_url        = None
   stat_url            = None
-  error               = None
-  error_message       = None
 
   def __init__(self, request, id=None, url=None, infohash=None):
     self.api   = request
@@ -86,7 +84,6 @@ class Stream(Extendable, Observable):
       self._set_attrs_to_values(response.data)
       self._start_watchers()
     else:
-      self._set_error_to_values(response)
       self._stop_watchers()
 
   def _start_watchers(self):
@@ -95,10 +92,6 @@ class Stream(Extendable, Observable):
 
   def _stop_watchers(self):
     self.stats.stop()
-
-  def _set_error_to_values(self, data):
-    self.error         = data.error
-    self.error_message = data.message
 
   def _check_required_args(self, **kwargs):
     values = list(filter(None, kwargs.values()))
