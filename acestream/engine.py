@@ -36,8 +36,15 @@ class Engine(Extendable, Observable):
   @property
 
   def process_args(self):
-    options = list(map(self._parse_option, self.options.items()))
-    return [*self.bin.split(' '), *options]
+    options = self.bin.split(' ')
+
+    for (key, value) in self.options.items():
+      options.append('--{0}'.format(key.replace('_', '-')))
+
+      if not isinstance(value, bool):
+        options.append(str(value))
+
+    return options
 
   def _start_proccess(self, kwargs):
     kwargs['preexec_fn'] = os.setsid
@@ -46,12 +53,3 @@ class Engine(Extendable, Observable):
       self.process = subprocess.Popen(self.process_args, **kwargs)
     except OSError:
       self.process = None
-
-  def _parse_option(self, option):
-    key, val = option
-    argument = '--{0}'.format(key.replace('_', '-'))
-
-    if not isinstance(val, bool):
-      argument = '{0} {1}'.format(argument, val)
-
-    return argument
