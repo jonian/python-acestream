@@ -3,11 +3,10 @@ import signal
 import threading
 import subprocess
 
-from acestream.object import Extendable
 from acestream.object import Observable
 
 
-class Engine(Extendable, Observable):
+class Engine(Observable):
 
   bin     = None
   options = None
