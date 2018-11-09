@@ -70,7 +70,7 @@ class Stream(Extendable, Observable):
 
   def stop(self):
     response = self.api.get(self.command_url, method='stop')
-    self.stats.stop()
+    self._stop_watchers()
 
     return response.data == 'ok'
 
@@ -85,9 +85,16 @@ class Stream(Extendable, Observable):
   def _set_response_to_values(self, response):
     if response.success:
       self._set_attrs_to_values(response.data)
-      self.stats.watch(self.stat_url)
+      self._start_watchers()
     else:
       self._set_error_to_values(response)
+
+  def _start_watchers(self):
+    if self.stat_url:
+      self.stats.watch(self.stat_url)
+
+  def _stop_watchers(self):
+    self.stats.stop()
 
   def _set_error_to_values(self, data):
     self.error         = data.error
