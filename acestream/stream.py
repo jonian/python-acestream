@@ -1,7 +1,48 @@
+import time
+import threading
+
 from acestream.object import Extendable
 from acestream.object import Observable
 
 from acestream.utils import sha1_hexdigest
+
+
+class Stats(Extendable, Observable):
+
+  stat_url       = None
+  status         = None
+  peers          = 0
+  speed_down     = 0
+  speed_up       = 0
+  downloaded     = 0
+  uploaded       = 0
+  progress       = 0
+  total_progress = 0
+
+  def __init__(self, request):
+    self.api = request
+
+  def watch(self, stat_url):
+    self.stat_url = stat_url
+    poller_thread = threading.Thread(target=self._poll_stats)
+
+    poller_thread.start()
+
+  def stop(self):
+    self.stat_url = None
+
+  def update(self):
+    response = self.api.get(self.stat_url)
+    self._set_response_to_values(response)
+
+  def _set_response_to_values(self, response):
+    if response.success:
+      self._set_attrs_to_values(response.data)
+
+  def _poll_stats(self):
+    while self.stat_url:
+      time.sleep(1)
+      self.update()
 
 
 class Stream(Extendable, Observable):
@@ -15,7 +56,8 @@ class Stream(Extendable, Observable):
   error_message       = None
 
   def __init__(self, request, id=None, url=None, infohash=None):
-    self.api = request
+    self.api   = request
+    self.stats = Stats(request)
 
     self._check_required_args(id=id, url=url, infohash=infohash)
     self._parse_stream_params(id=id, url=url, infohash=infohash)
@@ -28,6 +70,8 @@ class Stream(Extendable, Observable):
 
   def stop(self):
     response = self.api.get(self.command_url, method='stop')
+    self.stats.stop()
+
     return response.data == 'ok'
 
   @property
@@ -41,6 +85,7 @@ class Stream(Extendable, Observable):
   def _set_response_to_values(self, response):
     if response.success:
       self._set_attrs_to_values(response.data)
+      self.stats.watch(self.stat_url)
     else:
       self._set_error_to_values(response)
 
