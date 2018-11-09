@@ -92,7 +92,7 @@ class Request(object):
 
   def _parse_json(self, string):
     try:
-      return json.loads(str(string))
+      return json.loads(string)
     except (IOError, ValueError):
       return {}
 
