@@ -61,15 +61,22 @@ class Stream(Extendable, Observable):
 
   def start(self):
     response = self.api.getstream(sid=self.sid, **self.params)
-    self._set_response_to_values(response)
+    self._start_watchers()
 
-    return response.success
+    if response.success:
+      self._set_attrs_to_values(response.data)
+      self.emit('started')
+    else:
+      self.emit('error', response.error)
 
   def stop(self):
     response = self.api.get(self.command_url, method='stop')
     self._stop_watchers()
 
-    return response.data == 'ok'
+    if response.success:
+      self.emit('stopped')
+    else:
+      self.emit('error', response.error)
 
   @property
 
@@ -78,13 +85,6 @@ class Stream(Extendable, Observable):
     params = dict(filter(lambda item: item[1] is not None, params.items()))
 
     return params
-
-  def _set_response_to_values(self, response):
-    if response.success:
-      self._set_attrs_to_values(response.data)
-      self._start_watchers()
-    else:
-      self._stop_watchers()
 
   def _start_watchers(self):
     if self.stat_url:
