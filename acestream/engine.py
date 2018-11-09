@@ -39,7 +39,7 @@ class Engine(Extendable, Observable):
 
   def process_args(self):
     options = list(map(self._parse_option, self.options.items()))
-    return [self.bin, *options]
+    return [*self.bin.split(' '), *options]
 
   def _start_proccess(self, kwargs):
     kwargs['preexec_fn'] = os.setsid
