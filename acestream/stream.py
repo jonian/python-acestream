@@ -88,6 +88,7 @@ class Stream(Extendable, Observable):
       self._start_watchers()
     else:
       self._set_error_to_values(response)
+      self._stop_watchers()
 
   def _start_watchers(self):
     if self.stat_url:
