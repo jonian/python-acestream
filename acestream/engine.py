@@ -21,11 +21,15 @@ class Engine(Observable):
     if not self.running:
       thread = threading.Thread(target=self._start_proccess, args=[kwargs])
       thread.start()
+    else:
+      self.emit('started')
 
   def stop(self):
     if self.process:
       os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
+
       self.process = None
+      self.emit('terminated')
 
   @property
 
@@ -50,5 +54,11 @@ class Engine(Observable):
 
     try:
       self.process = subprocess.Popen(self.process_args, **kwargs)
-    except OSError:
+      self.emit('started')
+      self.process.communicate()
+
       self.process = None
+      self.emit('terminated')
+    except OSError as error:
+      self.process = None
+      self.emit('error', error.strerror)
