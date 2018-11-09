@@ -6,8 +6,6 @@ import subprocess
 from acestream.object import Extendable
 from acestream.object import Observable
 
-from acestream.request import Request
-
 
 class Engine(Extendable, Observable):
 
@@ -15,10 +13,10 @@ class Engine(Extendable, Observable):
   options = None
   process = None
 
-  def __init__(self, bin, **options):
+  def __init__(self, request, bin, **options):
+    self.api     = request
     self.bin     = bin
     self.options = options
-    self.api     = Request()
 
   def start(self, **kwargs):
     if not self.running:
