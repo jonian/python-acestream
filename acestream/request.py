@@ -10,7 +10,7 @@ class Response(object):
   def __init__(self, data=None, error=False, message=None):
     self.data    = data
     self.error   = error
-    self.success = not error
+    self.success = not bool(error)
     self.message = message
 
 
