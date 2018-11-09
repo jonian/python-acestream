@@ -31,7 +31,7 @@ class Engine(Extendable, Observable):
   @property
 
   def running(self):
-    return bool(self.process or self.api.getversion)
+    return bool(self.process or self.api.version)
 
   @property
 

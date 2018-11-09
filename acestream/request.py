@@ -17,9 +17,7 @@ class Response(object):
 class Request(object):
 
   def __init__(self, schema='http', host='127.0.0.1', port=6878):
-    self.base    = self._getapi_base(schema, host, port)
-    self.version = self._getapi_version()
-    self.token   = self._getapi_token()
+    self.base = self._getapi_base(schema, host, port)
 
   def get(self, url, **params):
     apiurl = self._geturl(url, **params)
@@ -49,6 +47,18 @@ class Request(object):
   def getbroadcast(self, manifest_url):
     return self.get('hls/manifest.m3u8', format='json', manifest_url=manifest_url)
 
+  @property
+
+  def version(self):
+    response = self.getversion()
+    return self._get_response_key(response, 'version')
+
+  @property
+
+  def token(self):
+    response = self.gettoken()
+    return self._get_response_key(response, 'token')
+
   def _geturl(self, path, **params):
     params = dict(map(self._parse_param, params.items()))
     params = urlencode(params)
@@ -75,14 +85,6 @@ class Request(object):
 
   def _getapi_base(self, schema, host, port):
     return '{0}://{1}:{2}'.format(schema, host, port)
-
-  def _getapi_version(self):
-    response = self.getversion()
-    return self._get_response_key(response, 'version')
-
-  def _getapi_token(self):
-    response = self.gettoken()
-    return self._get_response_key(response, 'token')
 
   def _get_response_key(self, response, key):
     if response.success:
