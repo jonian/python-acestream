@@ -1,10 +1,9 @@
 import time
+import hashlib
 import threading
 
 from acestream.object import Extendable
 from acestream.object import Observable
-
-from acestream.utils import sha1_hexdigest
 
 
 class Stats(Extendable, Observable):
@@ -114,5 +113,5 @@ class Stream(Extendable, Observable):
       raise TypeError('{0}: {1}'.format(banner, params))
 
   def _parse_stream_params(self, **kwargs):
-    self.sid = sha1_hexdigest(kwargs)
+    self.sid = hashlib.sha1(str(kwargs).encode('utf-8')).hexdigest()
     self._set_attrs_to_values(kwargs)

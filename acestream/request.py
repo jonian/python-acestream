@@ -1,8 +1,8 @@
+import json
+
 from urllib import request
 from urllib.parse import urlencode
 from urllib.error import URLError
-
-from acestream.utils import parse_json
 
 
 class Response(object):
@@ -64,7 +64,7 @@ class Request(object):
       return Response(error='noconnect', message='engine unavailable')
 
   def _generate_response(self, output):
-    output = parse_json(output)
+    output = self._parse_json(output)
     error  = output.get('error', 'content unavailable')
     result = output.get('result') or output.get('response')
 
@@ -87,6 +87,12 @@ class Request(object):
   def _get_response_key(self, response, key):
     if response.success:
       return response.data.get(key)
+
+  def _parse_json(self, string):
+    try:
+      return json.loads(str(string))
+    except (IOError, ValueError):
+      return {}
 
   def _parse_param(self, param):
     key, value = param
