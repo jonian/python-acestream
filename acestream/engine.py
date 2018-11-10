@@ -12,8 +12,7 @@ class Engine(Observable):
   options = None
   process = None
 
-  def __init__(self, request, bin, **options):
-    self.api     = request
+  def __init__(self, bin, **options):
     self.bin     = bin
     self.options = options
 
@@ -32,7 +31,7 @@ class Engine(Observable):
   @property
 
   def running(self):
-    return bool(self.process or self.api.version)
+    return bool(self.process)
 
   @property
 
