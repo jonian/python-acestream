@@ -37,6 +37,7 @@ class Stats(Extendable, Observable):
   def _set_response_to_values(self, response):
     if response.success:
       self._set_attrs_to_values(response.data)
+      self.emit('updated')
 
   def _poll_stats(self):
     while self.stat_url:
@@ -46,6 +47,7 @@ class Stats(Extendable, Observable):
 
 class Stream(Extendable, Observable):
 
+  status              = None
   is_live             = None
   playback_session_id = None
   command_url         = None
@@ -90,6 +92,7 @@ class Stream(Extendable, Observable):
   def _start_watchers(self):
     if self.stat_url:
       self.stats.watch(self.stat_url)
+      self.stats.connect('updated', self._on_stats_update)
 
   def _stop_watchers(self):
     self.stats.stop()
@@ -109,3 +112,13 @@ class Stream(Extendable, Observable):
   def _parse_stream_params(self, **kwargs):
     self.sid = hashlib.sha1(str(kwargs).encode('utf-8')).hexdigest()
     self._set_attrs_to_values(kwargs)
+
+  def _on_stats_update(self):
+    if self.status != self.stats.status:
+      self.status = self.stats.status
+      self.emit('status::changed')
+
+    if self.status == 'dl':
+      self.emit('playing')
+
+    self.emit('stats::update')
