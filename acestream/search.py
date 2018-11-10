@@ -12,13 +12,13 @@ class ChannelResult(Extendable):
   epg   = None
   items = None
 
-  def __init__(self, http_api, data):
-    self._generate_items(http_api, data.pop('items'))
+  def __init__(self, server, data):
+    self._generate_items(server, data.pop('items'))
     self._set_attrs_to_values(data)
     self._parse_attributes()
 
-  def _generate_items(self, http_api, results):
-    self.items = [StreamResult(http_api, i) for i in results]
+  def _generate_items(self, server, results):
+    self.items = [StreamResult(server, i) for i in results]
 
   def _parse_attributes(self):
     self.name  = self.name.strip()
@@ -38,13 +38,13 @@ class StreamResult(Extendable):
   in_playlist             = None
   stream                  = None
 
-  def __init__(self, http_api, data):
-    self._generate_stream(http_api, data.get('infohash'))
+  def __init__(self, server, data):
+    self._generate_stream(server, data.get('infohash'))
     self._set_attrs_to_values(data)
     self._parse_attributes()
 
-  def _generate_stream(self, http_api, infohash):
-    self.stream = Stream(http_api, infohash=infohash)
+  def _generate_stream(self, server, infohash):
+    self.stream = Stream(server, infohash=infohash)
 
   def _parse_attributes(self):
     self.name = self.name.strip()
@@ -61,8 +61,8 @@ class Search(Extendable):
   time        = 0
   results     = None
 
-  def __init__(self, http_api, **params):
-    self.api       = http_api
+  def __init__(self, server, **params):
+    self.server    = server
     self.params    = params
     self.page      = int(params.pop('page', 1))
     self.page_size = int(params.pop('page_size', 10))
@@ -70,7 +70,7 @@ class Search(Extendable):
 
   def get(self, page=1):
     self.page = page
-    response  = self.api.getsearch(**self.query_params)
+    response  = self.server.getsearch(**self.query_params)
 
     if response.success:
       results = response.data.pop('results')
@@ -92,6 +92,6 @@ class Search(Extendable):
 
   def _generate_results(self, results):
     if self.groups:
-      self.results = [ChannelResult(self.api, i) for i in results]
+      self.results = [ChannelResult(self.server, i) for i in results]
     else:
-      self.results = [StreamResult(self.api, i) for i in results]
+      self.results = [StreamResult(self.server, i) for i in results]

@@ -18,8 +18,8 @@ class Stats(Extendable, Observable):
   progress       = 0
   total_progress = 0
 
-  def __init__(self, http_api):
-    self.api = http_api
+  def __init__(self, server):
+    self.server = server
 
   def watch(self, stat_url):
     self.stat_url = stat_url
@@ -31,7 +31,7 @@ class Stats(Extendable, Observable):
     self.stat_url = None
 
   def update(self):
-    response = self.api.get(self.stat_url)
+    response = self.server.get(self.stat_url)
     self._set_response_to_values(response)
 
   def _set_response_to_values(self, response):
@@ -54,15 +54,15 @@ class Stream(Extendable, Observable):
   playback_url        = None
   stat_url            = None
 
-  def __init__(self, http_api, id=None, url=None, infohash=None):
-    self.api   = http_api
-    self.stats = Stats(http_api)
+  def __init__(self, server, id=None, url=None, infohash=None):
+    self.server = server
+    self.stats  = Stats(server)
 
     self._check_required_args(id=id, url=url, infohash=infohash)
     self._parse_stream_params(id=id, url=url, infohash=infohash)
 
   def start(self):
-    response = self.api.getstream(sid=self.sid, **self.params)
+    response = self.server.getstream(sid=self.sid, **self.params)
 
     if response.success:
       self._set_attrs_to_values(response.data)
@@ -73,7 +73,7 @@ class Stream(Extendable, Observable):
       self.emit('error', response.error)
 
   def stop(self):
-    response = self.api.get(self.command_url, method='stop')
+    response = self.server.get(self.command_url, method='stop')
 
     if response.success:
       self._stop_watchers()
