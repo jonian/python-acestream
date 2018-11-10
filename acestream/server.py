@@ -15,7 +15,7 @@ class Response(object):
 
 class Server(object):
 
-  def __init__(self, schema='http', host='127.0.0.1', port=6878):
+  def __init__(self, host, port=6878, schema='http'):
     self.base = self._geturl_base(schema, host, port)
 
   def get(self, url, **params):
