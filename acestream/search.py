@@ -12,13 +12,13 @@ class ChannelResult(Extendable):
   epg   = None
   items = None
 
-  def __init__(self, request, data):
-    self._generate_items(request, data.pop('items'))
+  def __init__(self, http_api, data):
+    self._generate_items(http_api, data.pop('items'))
     self._set_attrs_to_values(data)
     self._parse_attributes()
 
-  def _generate_items(self, request, results):
-    self.items = [StreamResult(request, i) for i in results]
+  def _generate_items(self, http_api, results):
+    self.items = [StreamResult(http_api, i) for i in results]
 
   def _parse_attributes(self):
     self.name  = self.name.strip()
@@ -38,13 +38,13 @@ class StreamResult(Extendable):
   in_playlist             = None
   stream                  = None
 
-  def __init__(self, request, data):
-    self._generate_stream(request, data.get('infohash'))
+  def __init__(self, http_api, data):
+    self._generate_stream(http_api, data.get('infohash'))
     self._set_attrs_to_values(data)
     self._parse_attributes()
 
-  def _generate_stream(self, request, infohash):
-    self.stream = Stream(request, infohash=infohash)
+  def _generate_stream(self, http_api, infohash):
+    self.stream = Stream(http_api, infohash=infohash)
 
   def _parse_attributes(self):
     self.name = self.name.strip()
@@ -61,8 +61,8 @@ class Search(Extendable):
   time        = 0
   results     = None
 
-  def __init__(self, request, **params):
-    self.api       = request
+  def __init__(self, http_api, **params):
+    self.api       = http_api
     self.params    = params
     self.page      = int(params.pop('page', 1))
     self.page_size = int(params.pop('page_size', 10))

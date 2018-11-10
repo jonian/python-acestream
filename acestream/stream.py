@@ -18,8 +18,8 @@ class Stats(Extendable, Observable):
   progress       = 0
   total_progress = 0
 
-  def __init__(self, request):
-    self.api = request
+  def __init__(self, http_api):
+    self.api = http_api
 
   def watch(self, stat_url):
     self.stat_url = stat_url
@@ -54,9 +54,9 @@ class Stream(Extendable, Observable):
   playback_url        = None
   stat_url            = None
 
-  def __init__(self, request, id=None, url=None, infohash=None):
-    self.api   = request
-    self.stats = Stats(request)
+  def __init__(self, http_api, id=None, url=None, infohash=None):
+    self.api   = http_api
+    self.stats = Stats(http_api)
 
     self._check_required_args(id=id, url=url, infohash=infohash)
     self._parse_stream_params(id=id, url=url, infohash=infohash)
