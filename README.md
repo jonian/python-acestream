@@ -34,7 +34,7 @@ if not server.available:
     while not engine.running:
       time.sleep(1)
 
-# Start a stream with a acestream channel ID
+# Start a stream using an acestream channel ID
 stream = Stream(server, id='ff36fce40a7d2042e327eaf9f215a1e9cb622b56')
 stream.start()
 
