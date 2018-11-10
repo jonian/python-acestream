@@ -70,7 +70,7 @@ class Stream(Extendable, Observable):
 
       self.emit('started')
     else:
-      self.emit('error', response.error)
+      self.emit('error', response.message)
 
   def stop(self):
     response = self.server.get(self.command_url, method='stop')
@@ -79,7 +79,7 @@ class Stream(Extendable, Observable):
       self._stop_watchers()
       self.emit('stopped')
     else:
-      self.emit('error', response.error)
+      self.emit('error', response.message)
 
   @property
 

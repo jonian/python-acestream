@@ -2,15 +2,16 @@ import json
 
 from urllib import request
 from urllib.parse import urlencode
-from urllib.error import URLError
+from urllib.error import HTTPError
 
 
 class Response(object):
 
-  def __init__(self, data=None, error=False):
+  def __init__(self, data=None, message=None, error=False):
     self.data    = data
     self.error   = error
     self.success = not bool(error)
+    self.message = message
 
 
 class Server(object):
@@ -74,8 +75,8 @@ class Server(object):
     try:
       response = request.urlopen(url).read()
       return self._generate_response(response)
-    except (ConnectionRefusedError, URLError):
-      return Response(error='engine unavailable')
+    except (IOError, HTTPError) as error:
+      return Response(error=True, message=str(error))
 
   def _generate_response(self, output):
     output = self._parse_json(output)
@@ -85,7 +86,7 @@ class Server(object):
     if result:
       return Response(data=result)
     else:
-      return Response(error=error)
+      return Response(error=True, message=error)
 
   def _geturl_base(self, schema, host, port):
     return '{0}://{1}:{2}'.format(schema, host, port)

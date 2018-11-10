@@ -58,4 +58,4 @@ class Engine(Observable):
       self.emit('terminated')
     except OSError as error:
       self.process = None
-      self.emit('error', error.strerror)
+      self.emit('error', str(error))
