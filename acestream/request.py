@@ -28,14 +28,14 @@ class Request(object):
   def getversion(self):
     return self.getservice(method='get_version')
 
-  def getapi(self, **params):
+  def getserver(self, **params):
     return self.get('server/api', **params)
 
   def gettoken(self):
-    return self.getapi(method='get_api_access_token')
+    return self.getserver(method='get_api_access_token')
 
   def getsearch(self, **params):
-    return self.getapi(method='search', token=self.token, **params)
+    return self.getserver(method='search', token=self.token, **params)
 
   def getstream(self, **params):
     if params.pop('hls', False):
