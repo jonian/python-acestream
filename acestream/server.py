@@ -1,8 +1,13 @@
 import json
 
-from urllib import request
-from urllib.parse import urlencode
-from urllib.error import HTTPError
+try:
+  from urllib.request import urlopen
+  from urllib.parse import urlencode
+  from urllib.error import HTTPError
+except ImportError:
+  from urllib import urlopen
+  from urllib import urlencode
+  from urllib2 import HTTPError
 
 
 class Response(object):
@@ -73,7 +78,7 @@ class Server(object):
 
   def _request(self, url):
     try:
-      response = request.urlopen(url).read()
+      response = urlopen(url).read()
       return self._generate_response(response)
     except (IOError, HTTPError) as error:
       return Response(error=True, message=str(error))
