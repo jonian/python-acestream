@@ -61,19 +61,20 @@ class Stream(Extendable, Observable):
 
   def start(self):
     response = self.api.getstream(sid=self.sid, **self.params)
-    self._start_watchers()
 
     if response.success:
       self._set_attrs_to_values(response.data)
+      self._start_watchers()
+
       self.emit('started')
     else:
       self.emit('error', response.error)
 
   def stop(self):
     response = self.api.get(self.command_url, method='stop')
-    self._stop_watchers()
 
     if response.success:
+      self._stop_watchers()
       self.emit('stopped')
     else:
       self.emit('error', response.error)
