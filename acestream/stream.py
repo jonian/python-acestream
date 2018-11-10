@@ -110,7 +110,9 @@ class Stream(Extendable, Observable):
       raise TypeError('{0}: {1}'.format(banner, params))
 
   def _parse_stream_params(self, **kwargs):
-    self.sid = hashlib.sha1(str(kwargs).encode('utf-8')).hexdigest()
+    sid_args = list(filter(None, kwargs.values()))
+    self.sid = hashlib.sha1(sid_args[0].encode('utf-8')).hexdigest()
+
     self._set_attrs_to_values(kwargs)
 
   def _on_stats_update(self):
