@@ -54,6 +54,11 @@ class Request(object):
 
   @property
 
+  def available(self):
+    return bool(self.version)
+
+  @property
+
   def token(self):
     response = self.gettoken()
     return self._get_response_key(response, 'token')
