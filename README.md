@@ -3,7 +3,7 @@ Python interface to interact with the AceStream Engine and the HTTP API.
 
 ## Installation
 ```
-pip install python-acestream
+pip install acestream
 ```
 
 ## Usage
