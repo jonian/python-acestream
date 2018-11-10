@@ -8,10 +8,13 @@ pip install python-acestream
 
 ## Usage
 ```python
+import os
+import time
 import subprocess
 
 from acestream.server import Server
 from acestream.engine import Engine
+from acestream.stream import Stream
 
 # Create an engine instance
 engine = Engine('acestreamengine', client_console=True)
@@ -27,12 +30,16 @@ if not server.available:
   if not server.available:
     engine.start()
 
+    # Wait for engine to start
+    while not engine.running:
+      time.sleep(1)
+
 # Start a stream with a acestream channel ID
 stream = Stream(server, id='ff36fce40a7d2042e327eaf9f215a1e9cb622b56')
 stream.start()
 
 # Open a media player to play the stream
-player = subprocess.Popen(['mpv', stream.playback_url])
+player = subprocess.Popen(['mpv', stream.playback_url], preexec_fn=os.setsid)
 
 # Wait for player to close and stop the stream
 player.communicate()
