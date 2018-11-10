@@ -16,7 +16,7 @@ class Response(object):
 class Request(object):
 
   def __init__(self, schema='http', host='127.0.0.1', port=6878):
-    self.base = self._getapi_base(schema, host, port)
+    self.base = self._geturl_base(schema, host, port)
 
   def get(self, url, **params):
     apiurl = self._geturl(url, **params)
@@ -87,7 +87,7 @@ class Request(object):
     else:
       return Response(error=error)
 
-  def _getapi_base(self, schema, host, port):
+  def _geturl_base(self, schema, host, port):
     return '{0}://{1}:{2}'.format(schema, host, port)
 
   def _get_response_key(self, response, key):
