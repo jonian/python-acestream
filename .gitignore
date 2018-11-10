@@ -1,8 +1,7 @@
 build
 dist
 acestream.egg-info
+test.py
 
-*test*
-*sample*
 *pycache*
 *.pyc*
