@@ -18,5 +18,9 @@ setuptools.setup(
     'Programming Language :: Python :: 3',
     'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     'Operating System :: POSIX :: Linux'
-  ]
+  ],
+  project_urls={
+    'Bug Reports': 'https://github.com/jonian/python-acestream/issues',
+    'Source': 'https://github.com/jonian/python-acestream',
+  }
 )
