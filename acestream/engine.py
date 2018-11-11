@@ -36,7 +36,7 @@ class Engine(Observable):
   @property
 
   def process_args(self):
-    options = self.bin.split(' ')
+    options = self.bin.split()
 
     for (key, value) in self.options.items():
       options.append('--{0}'.format(key.replace('_', '-')))
@@ -46,7 +46,7 @@ class Engine(Observable):
 
     return options
 
-  def _start_proccess(self, kwargs):
+  def _start_process(self, kwargs):
     kwargs['preexec_fn'] = os.setsid
 
     try:
