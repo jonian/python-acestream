@@ -1,7 +1,7 @@
 import time
 import hashlib
-import threading
 
+from threading import Thread
 from acestream.object import Extendable
 from acestream.object import Observable
 
@@ -23,7 +23,7 @@ class Stats(Extendable, Observable):
 
   def watch(self, stat_url):
     self.stat_url = stat_url
-    poller_thread = threading.Thread(target=self._poll_stats, daemon=True)
+    poller_thread = Thread(target=self._poll_stats, daemon=True)
 
     poller_thread.start()
 

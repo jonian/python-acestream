@@ -1,8 +1,8 @@
 import os
 import signal
-import threading
 import subprocess
 
+from threading import Thread
 from acestream.object import Observable
 
 
@@ -18,7 +18,7 @@ class Engine(Observable):
 
   def start(self, **kwargs):
     if not self.running:
-      thread = threading.Thread(target=self._start_process, args=[kwargs])
+      thread = Thread(target=self._start_process, kwargs=kwargs)
       thread.start()
 
   def stop(self):
@@ -46,7 +46,7 @@ class Engine(Observable):
 
     return options
 
-  def _start_process(self, kwargs):
+  def _start_process(self, **kwargs):
     kwargs['preexec_fn'] = os.setsid
 
     try:
