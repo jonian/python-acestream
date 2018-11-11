@@ -116,8 +116,10 @@ class Stream(Extendable, Observable):
     self._set_attrs_to_values(kwargs)
 
   def _on_stats_update(self):
-    self.emit('stats::update')
+    prev_status = self.status
+    self.status = self.stats.status
 
-    if self.status != self.stats.status:
-      self.status = self.stats.status
+    self.emit('stats::updated')
+
+    if prev_status != self.status:
       self.emit('status::changed')
