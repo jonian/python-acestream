@@ -18,7 +18,8 @@ class Engine(Observable):
 
   def start(self, daemon=True, **kwargs):
     if not self.running:
-      thread = Thread(target=self._start_process, kwargs=kwargs, daemon=daemon)
+      thread = Thread(target=self._start_process, kwargs=kwargs)
+      thread.setDaemon(daemon)
       thread.start()
 
   def stop(self):
