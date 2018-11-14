@@ -1,4 +1,3 @@
-import re
 import json
 
 try:
@@ -22,7 +21,7 @@ class Response(object):
   def _parse_message(self, message):
     if message:
       message = message.split(']')[-1]
-      message = re.sub(r"[<>]", '', message).strip()
+      message = message.lstrip('<').rstrip('>').strip()
       message = '%s%s' % (message[0].upper(), message[1:])
 
       return message
