@@ -1,3 +1,4 @@
+import re
 import json
 
 try:
@@ -16,7 +17,15 @@ class Response(object):
     self.data    = data
     self.error   = error
     self.success = not bool(error)
-    self.message = message
+    self.message = self._parse_message(message)
+
+  def _parse_message(self, message):
+    if message:
+      message = message.split(']')[-1]
+      message = re.sub(r"[<>]", '', message).strip()
+      message = '%s%s' % (message[0].upper(), message[1:])
+
+      return message
 
 
 class Server(object):
