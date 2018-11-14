@@ -30,8 +30,8 @@ class Response(object):
 
 class Request(object):
 
-  def __init__(self, host, port=6878, schema='http'):
-    self.base = self._geturl_base(schema, host, port)
+  def __init__(self, host, port=None, schema='http'):
+    self.base = self._geturl_base(schema, host, str(port))
 
   def get(self, url, **params):
     apiurl = self._geturl(url, **params)
@@ -81,6 +81,9 @@ class Request(object):
 
 
 class Server(Request):
+
+  def __init__(self, host, port=6878, schema='http'):
+    Request.__init__(self, host, port, schema)
 
   def getservice(self, **params):
     return self.get('webui/api/service', format='json', **params)
