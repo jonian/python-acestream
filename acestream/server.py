@@ -40,7 +40,7 @@ class Request(object):
   def _geturl(self, path, **params):
     params = dict(map(self._parse_param, params.items()))
     params = urlencode(params)
-    apiurl = str(path).replace('%s/' % self.base, '')
+    apiurl = str(path).replace(self.base, '').strip('/')
 
     return '{0}/{1}?{2}'.format(self.base, apiurl, params)
 
