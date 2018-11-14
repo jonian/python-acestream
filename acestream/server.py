@@ -87,20 +87,17 @@ class Server(object):
 
   def _request(self, url):
     try:
-      response = urlopen(url).read()
-      return self._generate_response(response)
+      response = self._parse_json(urlopen(url).read())
     except (IOError, HTTPError) as error:
-      return Response(error=True, message=str(error))
+      response = { 'result': None, 'error': str(error) }
+
+    return self._generate_response(response)
 
   def _generate_response(self, output):
-    output = self._parse_json(output)
-    error  = output.get('error', 'content unavailable')
     result = output.get('result') or output.get('response')
+    error  = output.get('error')
 
-    if result:
-      return Response(data=result)
-    else:
-      return Response(error=True, message=error)
+    return Response(data=result, error=bool(error), message=error)
 
   def _geturl_base(self, schema, host, port):
     return '{0}://{1}:{2}'.format(schema, host, port)
