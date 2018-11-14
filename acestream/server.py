@@ -59,7 +59,13 @@ class Request(object):
     return Response(data=result, error=bool(error), message=error)
 
   def _geturl_base(self, schema, host, port):
-    return '{0}://{1}:{2}'.format(schema, host, port)
+    if schema and not host.startswith(schema):
+      host = '{0}://{1}'.format(schema, host)
+
+    if port and not host.endswith(port):
+      host = '{0}:{1}'.format(host, port)
+
+    return host
 
   def _get_response_key(self, response, key):
     if response.success:
