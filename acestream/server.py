@@ -29,8 +29,8 @@ class Response(object):
 
 class Request(object):
 
-  def __init__(self, host, port=None, schema='http'):
-    self.base = self._geturl_base(schema, host, str(port))
+  def __init__(self, host, port=None, scheme='http'):
+    self.base = self._geturl_base(scheme, host, str(port))
 
   def get(self, url, **params):
     apiurl = self._geturl(url, **params)
@@ -57,9 +57,9 @@ class Request(object):
 
     return Response(data=result, error=bool(error), message=error)
 
-  def _geturl_base(self, schema, host, port):
-    if schema and not host.startswith(schema):
-      host = '{0}://{1}'.format(schema, host)
+  def _geturl_base(self, scheme, host, port):
+    if scheme and not host.startswith(scheme):
+      host = '{0}://{1}'.format(scheme, host)
 
     if port and not host.endswith(port):
       host = '{0}:{1}'.format(host, port)
@@ -87,8 +87,8 @@ class Request(object):
 
 class Server(Request):
 
-  def __init__(self, host, port=6878, schema='http'):
-    Request.__init__(self, host, port, schema)
+  def __init__(self, host, port=6878, scheme='http'):
+    Request.__init__(self, host, port, scheme)
 
   def getservice(self, **params):
     return self.get('webui/api/service', format='json', **params)
