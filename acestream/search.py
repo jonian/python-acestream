@@ -13,6 +13,8 @@ class ChannelResult(Extendable):
   items = None
 
   def __init__(self, server, data):
+    Extendable.__init__(self)
+
     self._generate_items(server, data.pop('items'))
     self._set_attrs_to_values(data)
     self._parse_attributes()
@@ -39,6 +41,8 @@ class StreamResult(Extendable):
   stream                  = None
 
   def __init__(self, server, data):
+    Extendable.__init__(self)
+
     self._generate_stream(server, data.get('infohash'))
     self._set_attrs_to_values(data)
     self._parse_attributes()
@@ -62,6 +66,8 @@ class Search(Extendable):
   results     = None
 
   def __init__(self, server, **params):
+    Extendable.__init__(self)
+
     self.server    = server
     self.params    = params
     self.page      = int(params.pop('page', 1))

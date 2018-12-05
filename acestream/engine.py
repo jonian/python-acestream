@@ -13,6 +13,8 @@ class Engine(Observable):
   process = None
 
   def __init__(self, bin, **options):
+    Observable.__init__(self)
+
     self.bin     = bin
     self.options = options
 

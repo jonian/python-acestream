@@ -20,6 +20,9 @@ class Stats(Extendable, Observable):
 
   def __init__(self, server):
     self.server = server
+    Extendable.__init__(self)
+    Observable.__init__(self)
+
 
   def watch(self, stat_url):
     self.stat_url = stat_url
@@ -56,6 +59,9 @@ class Stream(Extendable, Observable):
   stat_url            = None
 
   def __init__(self, server, id=None, url=None, infohash=None):
+    Extendable.__init__(self)
+    Observable.__init__(self)
+
     self.server = server
     self.stats  = Stats(server)
 
