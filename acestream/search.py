@@ -81,7 +81,6 @@ class Search(Extendable):
       self.total_pages = math.ceil(self.total / self.page_size)
 
   @property
-
   def query_params(self):
     params = self.params
 

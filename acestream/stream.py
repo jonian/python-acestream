@@ -87,7 +87,6 @@ class Stream(Extendable, Observable):
       self.emit('error', response.message)
 
   @property
-
   def params(self):
     params = { 'id': self.id, 'url': self.url, 'infohash': self.infohash }
     params = dict(filter(lambda item: item[1] is not None, params.items()))

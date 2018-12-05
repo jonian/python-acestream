@@ -115,18 +115,15 @@ class Server(Request):
     return self.get('hls/manifest.m3u8', format='json', manifest_url=manifest_url)
 
   @property
-
   def version(self):
     response = self.getversion()
     return self._get_response_key(response, 'version')
 
   @property
-
   def available(self):
     return bool(self.version)
 
   @property
-
   def token(self):
     response = self.gettoken()
     return self._get_response_key(response, 'token')

@@ -29,12 +29,10 @@ class Engine(Observable):
       self.emit('terminated')
 
   @property
-
   def running(self):
     return bool(self.process)
 
   @property
-
   def process_args(self):
     options = self.bin.split()
 
