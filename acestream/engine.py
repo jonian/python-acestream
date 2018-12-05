@@ -8,13 +8,10 @@ from acestream.object import Observable
 
 class Engine(Observable):
 
-  bin     = None
-  options = None
-  process = None
-
   def __init__(self, bin, **options):
     Observable.__init__(self)
 
+    self.process = None
     self.bin     = bin
     self.options = options
 

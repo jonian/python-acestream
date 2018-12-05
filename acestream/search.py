@@ -6,14 +6,14 @@ from acestream.stream import Stream
 
 class ChannelResult(Extendable):
 
-  total = 0
-  name  = None
-  icon  = None
-  epg   = None
-  items = None
-
   def __init__(self, server, data):
     Extendable.__init__(self)
+
+    self.total = 0
+    self.name  = None
+    self.icon  = None
+    self.epg   = None
+    self.items = None
 
     self._generate_items(server, data.pop('items'))
     self._set_attrs_to_values(data)
@@ -29,19 +29,19 @@ class ChannelResult(Extendable):
 
 class StreamResult(Extendable):
 
-  infohash                = None
-  name                    = None
-  channel_id              = None
-  bitrate                 = None
-  categories              = None
-  availability_updated_at = None
-  availability            = None
-  status                  = None
-  in_playlist             = None
-  stream                  = None
-
   def __init__(self, server, data):
     Extendable.__init__(self)
+
+    self.infohash                = None
+    self.name                    = None
+    self.channel_id              = None
+    self.bitrate                 = None
+    self.categories              = None
+    self.availability_updated_at = None
+    self.availability            = None
+    self.status                  = None
+    self.in_playlist             = None
+    self.stream                  = None
 
     self._generate_stream(server, data.get('infohash'))
     self._set_attrs_to_values(data)
@@ -56,23 +56,18 @@ class StreamResult(Extendable):
 
 class Search(Extendable):
 
-  params      = None
-  groups      = False
-  page        = 1
-  page_size   = 10
-  total_pages = 0
-  total       = 0
-  time        = 0
-  results     = None
-
   def __init__(self, server, **params):
     Extendable.__init__(self)
 
-    self.server    = server
-    self.params    = params
-    self.page      = int(params.pop('page', 1))
-    self.page_size = int(params.pop('page_size', 10))
-    self.groups    = bool(params.pop('group_by_channels', False))
+    self.total_pages = 0
+    self.total       = 0
+    self.time        = 0
+    self.results     = None
+    self.server      = server
+    self.params      = params
+    self.page        = int(params.pop('page', 1))
+    self.page_size   = int(params.pop('page_size', 10))
+    self.groups      = bool(params.pop('group_by_channels', False))
 
   def get(self, page=1):
     self.page = page

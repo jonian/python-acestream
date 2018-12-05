@@ -8,21 +8,20 @@ from acestream.object import Observable
 
 class Stats(Extendable, Observable):
 
-  stat_url       = None
-  status         = None
-  peers          = 0
-  speed_down     = 0
-  speed_up       = 0
-  downloaded     = 0
-  uploaded       = 0
-  progress       = 0
-  total_progress = 0
-
   def __init__(self, server):
-    self.server = server
     Extendable.__init__(self)
     Observable.__init__(self)
 
+    self.stat_url       = None
+    self.status         = None
+    self.peers          = 0
+    self.speed_down     = 0
+    self.speed_up       = 0
+    self.downloaded     = 0
+    self.uploaded       = 0
+    self.progress       = 0
+    self.total_progress = 0
+    self.server         = server
 
   def watch(self, stat_url):
     self.stat_url = stat_url
@@ -51,19 +50,18 @@ class Stats(Extendable, Observable):
 
 class Stream(Extendable, Observable):
 
-  status              = None
-  is_live             = None
-  playback_session_id = None
-  command_url         = None
-  playback_url        = None
-  stat_url            = None
-
   def __init__(self, server, id=None, url=None, infohash=None):
     Extendable.__init__(self)
     Observable.__init__(self)
 
-    self.server = server
-    self.stats  = Stats(server)
+    self.status              = None
+    self.is_live             = None
+    self.playback_session_id = None
+    self.command_url         = None
+    self.playback_url        = None
+    self.stat_url            = None
+    self.server              = server
+    self.stats               = Stats(server)
 
     self._check_required_args(id=id, url=url, infohash=infohash)
     self._parse_stream_params(id=id, url=url, infohash=infohash)
