@@ -106,10 +106,10 @@ class Server(Request):
     return self.getserver(method='search', token=self.token, **params)
 
   def getstream(self, **params):
-    if params.pop('hls', False):
-      return self.get('ace/manifest.m3u8', format='json', **params)
-    else:
-      return self.get('ace/getstream', format='json', **params)
+    is_hls = params.pop('hls', False)
+    apiurl = 'manifest.m3u8' if is_hls else 'getstream'
+
+    return self.get('ace/{0}'.format(apiurl), format='json', **params)
 
   def getbroadcast(self, manifest_url):
     return self.get('hls/manifest.m3u8', format='json', manifest_url=manifest_url)
