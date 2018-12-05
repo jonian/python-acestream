@@ -32,8 +32,8 @@ class Request(object):
   def __init__(self, host, port=None, scheme='http'):
     self.base = self._geturl_base(scheme, host, str(port))
 
-  def get(self, url, **params):
-    apiurl = self._geturl(url, **params)
+  def get(self, req_url, **params):
+    apiurl = self._geturl(req_url, **params)
     return self._request(apiurl)
 
   def _geturl(self, path, **params):
@@ -43,9 +43,9 @@ class Request(object):
 
     return '{0}/{1}?{2}'.format(self.base, apiurl, params)
 
-  def _request(self, url):
+  def _request(self, req_url):
     try:
-      response = self._parse_json(urlopen(url).read())
+      response = self._parse_json(urlopen(req_url).read())
     except (IOError, HTTPError) as error:
       response = { 'result': None, 'error': str(error) }
 
