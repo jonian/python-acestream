@@ -28,7 +28,7 @@ try:
         time.sleep(1)
 
   # Start a stream using an acestream channel ID
-  stream = Stream(server, id='ff36fce40a7d2042e327eaf9f215a1e9cb622b56')
+  stream = Stream(server, id='dce1975f071782d269563c2f83d813c38b5f5205')
   stream.start()
 
   # Open a media player to play the stream
