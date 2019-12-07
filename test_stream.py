@@ -7,6 +7,10 @@ from acestream.server import Server
 from acestream.engine import Engine
 from acestream.stream import Stream
 
+player = None
+stream = None
+engine = None
+
 try:
   # Create an engine instance
   engine = Engine('acestreamengine', client_console=True)
