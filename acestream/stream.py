@@ -66,8 +66,9 @@ class Stream(Extendable, Observable):
     self._check_required_args(id=id, url=url, infohash=infohash)
     self._parse_stream_params(id=id, url=url, infohash=infohash)
 
-  def start(self):
-    response = self.server.getstream(pid=self.pid, **self.params)
+  def start(self, hls=False, **kwargs):
+    kwparams = dict(kwargs, **self.params) if hls else self.params
+    response = self.server.getstream(pid=self.pid, hls=hls, **kwparams)
 
     if response.success:
       self._set_attrs_to_values(response.data)
