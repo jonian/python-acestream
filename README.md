@@ -82,7 +82,7 @@ for result in search.results:
 
 # Start a random stream from the search results
 stream = random.choice(search.results).stream
-stream.start()
+stream.start(hls=True, transcode_audio=True)
 
 # Open a media player to play the stream
 player = subprocess.Popen(['mpv', stream.playback_url])
