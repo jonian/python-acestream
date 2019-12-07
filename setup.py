@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
   name='acestream',
-  version='0.1.6',
+  version='0.1.7',
   author='Jonian Guveli',
   author_email='jonian@hardpixel.eu',
   description='Interact with the AceStream Engine and the HTTP API',
