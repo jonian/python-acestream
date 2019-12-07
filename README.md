@@ -78,7 +78,7 @@ search.get(page=1)
 
 # Iterate and print search results
 for result in search.results:
-  print(result.name.ljust(40), str(result.bitrate).ljust(10), result.infohash)
+  print("%40s %10s %40s" % (result.name, result.bitrate, result.infohash))
 
 # Start a random stream from the search results
 stream = random.choice(search.results).stream
