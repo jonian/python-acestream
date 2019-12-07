@@ -67,7 +67,7 @@ class Stream(Extendable, Observable):
     self._parse_stream_params(id=id, url=url, infohash=infohash)
 
   def start(self):
-    response = self.server.getstream(sid=self.sid, **self.params)
+    response = self.server.getstream(pid=self.pid, **self.params)
 
     if response.success:
       self._set_attrs_to_values(response.data)
@@ -115,7 +115,7 @@ class Stream(Extendable, Observable):
 
   def _parse_stream_params(self, **kwargs):
     sid_args = list(filter(None, kwargs.values()))
-    self.sid = hashlib.sha1(sid_args[0].encode('utf-8')).hexdigest()
+    self.pid = hashlib.sha1(sid_args[0].encode('utf-8')).hexdigest()
 
     self._set_attrs_to_values(kwargs)
 

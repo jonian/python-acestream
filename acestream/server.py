@@ -1,5 +1,7 @@
 import json
 
+from packaging import version
+
 try:
   from urllib.request import urlopen
   from urllib.parse import urlencode
@@ -108,6 +110,9 @@ class Server(Request):
   def getstream(self, **params):
     is_hls = params.pop('hls', False)
     apiurl = 'manifest.m3u8' if is_hls else 'getstream'
+
+    if version.parse(self.version) < version.parse('3.1.29'):
+      params['sid'] = params.pop('pid')
 
     return self.get('ace/{0}'.format(apiurl), format='json', **params)
 
