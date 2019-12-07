@@ -40,5 +40,8 @@ try:
   # Stop acestream engine
   engine.stop()
 except KeyboardInterrupt:
-  engine.stop()
+  if player: player.kill()
+  if stream: stream.stop()
+  if engine: engine.stop()
+
   print('\n\nExiting...')
