@@ -8,7 +8,6 @@ pip install acestream
 
 ## Usage
 ```python
-import os
 import time
 import subprocess
 
@@ -39,7 +38,7 @@ stream = Stream(server, id='ff36fce40a7d2042e327eaf9f215a1e9cb622b56')
 stream.start()
 
 # Open a media player to play the stream
-player = subprocess.Popen(['mpv', stream.playback_url], preexec_fn=os.setsid)
+player = subprocess.Popen(['mpv', stream.playback_url])
 
 # Wait for player to close and stop the stream
 player.communicate()
@@ -51,7 +50,6 @@ engine.stop()
 
 ## Search
 ```python
-import os
 import time
 import random
 import subprocess
@@ -87,7 +85,7 @@ stream = random.choice(search.results).stream
 stream.start()
 
 # Open a media player to play the stream
-player = subprocess.Popen(['mpv', stream.playback_url], preexec_fn=os.setsid)
+player = subprocess.Popen(['mpv', stream.playback_url])
 
 # Wait for player to close and stop the stream
 player.communicate()

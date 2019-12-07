@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os
 import time
 import subprocess
 
@@ -32,7 +31,7 @@ try:
   stream.start()
 
   # Open a media player to play the stream
-  player = subprocess.Popen(['mpv', stream.playback_url], preexec_fn=os.setsid)
+  player = subprocess.Popen(['mpv', stream.playback_url])
 
   # Wait for player to close and stop the stream
   player.communicate()
