@@ -1,5 +1,5 @@
 # Python AceStream
-Python interface to interact with the AceStream [Engine](http://wiki.acestream.org/wiki/index.php/Streaming/en), [HTTP API](http://wiki.acestream.org/wiki/index.php/Engine_HTTP_API) and [Search API](http://wiki.acestream.org/wiki/index.php/Search_API).
+Python interface to interact with the AceStream [Engine](https://wiki.acestream.media/Streaming), [HTTP API](https://wiki.acestream.media/Engine_HTTP_API) and [Search API](https://wiki.acestream.media/Search_API).
 
 ## Installation
 ```
