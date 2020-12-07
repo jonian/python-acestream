@@ -89,8 +89,10 @@ class Request(object):
 
 class Server(Request):
 
-  def __init__(self, host, port=6878, scheme='http'):
+  def __init__(self, host, port=6878, scheme='http', api_token=None):
     Request.__init__(self, host, port, scheme)
+
+    self.api_token = api_token
 
   def getservice(self, **params):
     return self.get('webui/api/service', format='json', **params)
@@ -130,5 +132,8 @@ class Server(Request):
 
   @property
   def token(self):
-    response = self.gettoken()
-    return self._get_response_key(response, 'token')
+    if not self.api_token:
+      response = self.gettoken()
+      self.api_token = self._get_response_key(response, 'token')
+
+    return self.api_token
