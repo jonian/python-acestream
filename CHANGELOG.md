@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.1.9](https://github.com/jonian/python-acestream/tree/v0.1.9) (2021-04-07)
+
+[Full Changelog](https://github.com/jonian/python-acestream/compare/v0.1.8...v0.1.9)
+
+**Merged pull requests:**
+
+- caperucitaferoz-patch-1 [\#4](https://github.com/jonian/python-acestream/pull/4) ([caperucitaferoz](https://github.com/caperucitaferoz))
+
 ## [v0.1.8](https://github.com/jonian/python-acestream/tree/v0.1.8) (2020-12-07)
 
 [Full Changelog](https://github.com/jonian/python-acestream/compare/v0.1.7...v0.1.8)
