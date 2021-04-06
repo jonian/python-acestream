@@ -10,12 +10,14 @@ class Extendable(object):
 class Observable(object):
 
   def __init__(self):
-    self._events = []
+    self._events = dict()
 
   def connect(self, event_name, callback_fn):
-    self._events.append({ 'event_name': event_name, 'callback_fn': callback_fn })
+    self._events[event_name] = callback_fn
+
+  def disconnect(self, event_name):
+    self._events.pop(event_name, None)
 
   def emit(self, event_name, *callback_args):
-    for event in self._events:
-      if event['event_name'] == event_name:
-        event['callback_fn'](*callback_args)
+    if event_name in self._events:
+      self._events[event_name](*callback_args)

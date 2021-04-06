@@ -23,7 +23,10 @@ class Engine(Observable):
 
   def stop(self):
     if self.process:
-      os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
+      try:
+        os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
+      except:
+        subprocess.call(['taskkill', '/F', '/T', '/PID', str(self.process.pid)])
 
       self.process = None
       self.emit('terminated')
@@ -45,7 +48,10 @@ class Engine(Observable):
     return options
 
   def _start_process(self, **kwargs):
-    kwargs['preexec_fn'] = os.setsid
+    try:
+      kwargs['preexec_fn'] = os.setsid
+    except:
+      kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
 
     try:
       self.process = subprocess.Popen(self.process_args, **kwargs)
