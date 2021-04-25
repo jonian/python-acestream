@@ -60,6 +60,8 @@ class Stream(Extendable, Observable):
     self.command_url         = None
     self.playback_url        = None
     self.stat_url            = None
+    self.is_encrypted        = None
+    self.client_session_id   = None
     self.server              = server
     self.stats               = Stats(server)
 
