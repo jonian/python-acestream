@@ -21,12 +21,14 @@ class Response(object):
     self.message = self._parse_message(message)
 
   def _parse_message(self, message):
-    if message:
+    if isinstance(message, str):
       message = message.split(']')[-1]
       message = message.lstrip('<').rstrip('>').strip()
       message = '%s%s' % (message[0].upper(), message[1:])
+    elif isinstance(message, dict):
+      message = message.get('message', 'internal server error')
 
-      return message
+    return message
 
 
 class Request(object):
