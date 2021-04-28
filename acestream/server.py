@@ -123,7 +123,7 @@ class Server(Request):
     is_hls = params.pop('hls', False)
     apiurl = 'manifest.m3u8' if is_hls else 'getstream'
 
-    if LooseVersion(self.version) < LooseVersion('3.1.29'):
+    if self.version and LooseVersion(self.version) < LooseVersion('3.1.29'):
       params['sid'] = params.pop('pid')
 
     return self.get('ace/{0}'.format(apiurl), format='json', **params)
