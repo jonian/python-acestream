@@ -33,14 +33,16 @@ class Response(object):
 
 class Request(object):
 
-  def __init__(self, host, port=None, scheme='http'):
+  def __init__(self, host, port=None, scheme='http', api_version=None):
     self.base = self._geturl_base(scheme, host, str(port))
+    self.api_version = api_version
 
   def get(self, req_url, **params):
     apiurl = self._geturl(req_url, **params)
     return self._request(apiurl)
 
   def _geturl(self, path, **params):
+    params = self._append_api_version(params)
     params = dict(map(self._parse_param, params.items()))
     params = urlencode(params)
     apiurl = str(path).replace(self.base, '').strip('/')
@@ -70,6 +72,12 @@ class Request(object):
 
     return host
 
+  def _append_api_version(self, params):
+    if self.api_version and not 'api_version' in params:
+      params['api_version'] = self.api_version
+
+    return params
+
   def _get_response_key(self, response, key):
     if response.success:
       return response.data.get(key)
@@ -91,8 +99,8 @@ class Request(object):
 
 class Server(Request):
 
-  def __init__(self, host, port=6878, scheme='http', api_token=None):
-    Request.__init__(self, host, port, scheme)
+  def __init__(self, host, port=6878, scheme='http', api_token=None, api_version=None):
+    Request.__init__(self, host, port, scheme, api_version)
 
     self.api_token = api_token
 
