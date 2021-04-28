@@ -1,6 +1,14 @@
 # Changelog
 
-## [v0.1.9](https://github.com/jonian/python-acestream/tree/v0.1.9) (2021-04-07)
+## [v0.2.0](https://github.com/jonian/python-acestream/tree/v0.2.0) (2021-04-28)
+
+[Full Changelog](https://github.com/jonian/python-acestream/compare/v0.1.9...v0.2.0)
+
+**Closed issues:**
+
+- python-acestream for macOS ? [\#1](https://github.com/jonian/python-acestream/issues/1)
+
+## [v0.1.9](https://github.com/jonian/python-acestream/tree/v0.1.9) (2021-04-06)
 
 [Full Changelog](https://github.com/jonian/python-acestream/compare/v0.1.8...v0.1.9)
 
