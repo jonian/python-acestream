@@ -48,6 +48,21 @@ class Stats(Extendable, Observable):
       self.update()
 
 
+class Info(object):
+
+  def __init__(self):
+    self.name  = None
+    self.files = list()
+
+  def update(self, data):
+    if 'name' in data:
+      self.name  = data['name']
+      self.files = data['files']
+    elif '0' in data:
+      self.name  = data['0']
+      self.files = [{ 'index': int(idx), 'filename': file } for (idx, file) in data.items()]
+
+
 class Stream(Extendable, Observable):
 
   def __init__(self, server, id=None, url=None, infohash=None):
@@ -63,6 +78,7 @@ class Stream(Extendable, Observable):
     self.is_encrypted        = None
     self.client_session_id   = None
     self.server              = server
+    self.info                = Info()
     self.stats               = Stats(server)
 
     self._check_required_args(id=id, url=url, infohash=infohash)
@@ -74,6 +90,7 @@ class Stream(Extendable, Observable):
 
     if response.success:
       self._set_attrs_to_values(response.data)
+      self._update_stream_info()
       self._start_watchers()
 
       self.emit('started')
@@ -103,6 +120,12 @@ class Stream(Extendable, Observable):
 
   def _stop_watchers(self):
     self.stats.stop()
+
+  def _update_stream_info(self):
+    response = self.server.getserver(method='get_media_files', infohash=self.infohash)
+
+    if response.success:
+      self.info.update(response.data)
 
   def _check_required_args(self, **kwargs):
     values = list(filter(None, kwargs.values()))
